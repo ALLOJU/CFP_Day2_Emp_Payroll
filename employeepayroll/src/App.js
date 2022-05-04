@@ -20,6 +20,7 @@ function App() {
         
         <Route exact path="/" component={DashBoard}/>
         <Route exact path="/payroll" component={PayrollForm}/> 
+        <Route exact path="/payroll/:id" component={PayrollForm}/> 
         
       </Switch>
     </div>

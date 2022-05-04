@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
+import { useParams } from "react-router-dom/cjs/react-router-dom.min";
+import { useEffect } from "react";
 import profile1 from '../../assets/profile-images/Ellipse -3.png';
 import profile2 from '../../assets/profile-images/Ellipse -1.png';
 import profile3 from '../../assets/profile-images/Ellipse -8.png';
 import profile4 from '../../assets/profile-images/Ellipse -7.png';
 import logo from '../../assets/images/logo.png'
 import './PayrollForm.css';
+import axios from 'axios'
 import { Link } from 'react-router-dom';
-const AddUser = () => {
-   
+import EmployeeService from '../../services/employee-service.js';
+const AddUser = (props) => {
     
     const [user, setUser] = useState({
         name: '',
@@ -30,14 +33,14 @@ const AddUser = () => {
         startDate: '',
         notes: '',
         id: '',
-        profilePic: '',
+        profileURL: '',
         isUpdate: false,
         error: {
             department: '',
             name: '',
             gender: '',
             salary: '',
-            profilePic: '',
+            profileURL: '',
             startDate: ''
         }
     });
@@ -47,10 +50,72 @@ const AddUser = () => {
         setUser({ ...user, [event.target.name]: event.target.value });
     };
 
-    const onSubmit = async event => {
-        console.log(user);
-        event.preventDefault();
-    };
+    const params = useParams();
+
+ const getEmployeeByID = (id) => {
+     EmployeeService.getEmployee(id).then((response) => {
+         let obj = response.data;
+         console.log(obj);
+         setData(obj);
+     }).catch((error) => {
+         alert(error);
+     });
+ }
+
+ const setData = (obj) => {
+    let array=obj.startDate;
+    setUser({
+         ...user,
+         ...obj,
+         id: obj.id,
+         name: obj.name,
+         profileURL: obj.profileURL,
+         gender: obj.gender,
+         departMentValue: obj.department,
+         salary: obj.salary,
+         //startDate: obj.startDate,
+         notes: obj.notes,
+         isUpdate: true,
+         
+         day:array[0]+array[1],
+                   month:array[3]+array[4]+array[5],
+                   year:array[7]+array[8]+array[9]+array[10],
+         
+     });
+ }
+ useEffect(() => {
+    if (params.id) {
+        getEmployeeByID(params.id);
+    }
+}, []);
+ const save = async (event) => {
+    event.preventDefault();
+    let object = {
+        name: user.name,
+        department: user.departMentValue,
+        gender: user.gender,
+        salary: user.salary,
+        startDate: `${user.day} ${user.month} ${user.year}`,
+        notes: user.notes,
+        id: user.id,
+        profileURL: user.profileURL,
+    }
+    if (user.isUpdate) {
+        EmployeeService.updateEmployee(params.id, object).then((response) => {
+            props.history.push('');
+        }).catch((error) => {
+            alert(error);
+        })
+    }
+    else {
+        EmployeeService.addEmployee(object).then(() => {
+            console.log("data added successfully");
+            props.history.push('');
+        }).catch((error) => {
+            alert(error);
+        })
+    }
+ }
     const changeValue = (event) => {
         setUser({ ...user, [event.target.name]: event.target.value })
         console.log(event.target.value)
@@ -81,7 +146,7 @@ const AddUser = () => {
                 </div>
             </header>
             <div className="form-content">
-                <form className="form-head" action="#" onSubmit={onSubmit}>
+                <form className="form-head" action="#" onSubmit={save}>
                     <div className="form-head">Employee Payroll form</div>
                     <div className="row-content">
                         <label className="label text" htmlFor="name">Name</label>
@@ -89,28 +154,27 @@ const AddUser = () => {
                         {/* <error className="error">{user.error.name}</error> */}
                     </div>
                     <div className="row-content">
-                        <label className="label text" htmlFor="profilePic">Profile image</label>
+                        <label className="label text" htmlFor="profileURL">Profile image</label>
                         <div className="profile-radio-content">
                             <label >
-                                <input type="radio" name="profilePic" checked={user.profilePic === '../../assets/profile-images/Ellipse -1.png'} value="../../assets/profile-images/Ellipse -1.png" onChange={changeValue} />
+                                <input type="radio" name="profileURL" checked={user.profileURL === '../../assets/profile-images/Ellipse -1.png'} value="../../assets/profile-images/Ellipse -1.png" onChange={changeValue} />
                                 <img className="profile" src={profile2} alt="profile" />
                             </label>
                             <label >
-                                <input type="radio" name="profilePic" checked={user.profilePic === '../../assets/profile-images/Ellipse -3.png'} value="../../assets/profile-images/Ellipse -3.png" onChange={changeValue} />
+                                <input type="radio" name="profileURL" checked={user.profileURL === '../../assets/profile-images/Ellipse -3.png'} value="../../assets/profile-images/Ellipse -3.png" onChange={changeValue} />
                                 <img className="profile" src={profile1} alt="profile" />
                             </label>
                             <label >
-                                <input type="radio" name="profilePic" checked={user.profilePic === '../../assets/profile-images/Ellipse -7.png'} value="../../assets/profile-images/Ellipse -7.png" onChange={changeValue} />
+                                <input type="radio" name="profileURL" checked={user.profileURL === '../../assets/profile-images/Ellipse -7.png'} value="../../assets/profile-images/Ellipse -7.png" onChange={changeValue} />
                                 <img className="profile" src={profile4} alt="profile" />
                             </label>
                             <label >
-                   
-                                <input type="radio" name="profilePic" checked={user.profilePic === '../../assets/profile-images/Ellipse -8.png'} value="../../assets/profile-images/Ellipse -8.png" onChange={changeValue} />
+                                <input type="radio" name="profileURL" checked={user.profileURL === '../../assets/profile-images/Ellipse -8.png'} value="../../Assets/profile-images/Ellipse -8.png" onChange={changeValue} />
                                 <img className="profile" src={profile3} alt="profile" />
                             </label>
 
                         </div>
-                        {/* <error className="error">{user.error.profilePic}</error> */}
+                        {/* <error className="error">{user.error.profileURL}</error> */}
                     </div>
                     <div className="row-content">
                         <label className="label text" htmlFor="gender">Gender</label>
@@ -123,7 +187,7 @@ const AddUser = () => {
                         {/* <error className="error">{user.error.gender}</error> */}
                     </div>
                     <div className="row-content">
-                        <label className="label text" htmlFor="departments">Department</label>
+                        <label className="label text" htmlFor="department">Department</label>
                         <div>
                             {user.allDepartment.map(item => (
                                 <span key={item}>
@@ -228,6 +292,6 @@ const AddUser = () => {
             </div >
         </div >
     );
-}
+};
 
 export default AddUser;

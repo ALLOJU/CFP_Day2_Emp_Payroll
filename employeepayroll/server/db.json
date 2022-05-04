@@ -1,0 +1,29 @@
+{
+  "employee": [
+    {
+      "name": "Mounika",
+      "department": [
+        "Engineer",
+        "Finance"
+      ],
+      "gender": "female",
+      "salary": "45645",
+      "startDate": "04 Apr 2020",
+      "notes": "gsrh",
+      "id": 1,
+      "profileURL": "../../assets/profile-images/Ellipse -7.png"
+    },
+    {
+      "name": "veekshan",
+      "department": [
+        "Engineer"
+      ],
+      "gender": "male",
+      "salary": "45645",
+      "startDate": "06 Sep 2021",
+      "notes": "sdgdf",
+      "id": 2,
+      "profileURL": "../../assets/profile-images/Ellipse -3.png"
+    }
+  ]
+}
