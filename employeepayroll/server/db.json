@@ -14,7 +14,7 @@
       "profileURL": "../../assets/profile-images/Ellipse -7.png"
     },
     {
-      "name": "veekshan",
+      "name": "Veekshan",
       "department": [
         "Engineer"
       ],
@@ -23,6 +23,18 @@
       "startDate": "06 Sep 2021",
       "notes": "sdgdf",
       "id": 2,
+      "profileURL": "../../assets/profile-images/Ellipse -3.png"
+    },
+    {
+      "name": "Ramesh",
+      "department": [
+        "Engineer"
+      ],
+      "gender": "male",
+      "salary": "4564",
+      "startDate": "03 Mar 2018",
+      "notes": "afsd",
+      "id": 3,
       "profileURL": "../../assets/profile-images/Ellipse -3.png"
     }
   ]
